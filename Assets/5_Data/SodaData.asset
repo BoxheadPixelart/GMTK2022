@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a4a883f5aa74e74fba984c968cf96d3, type: 3}
   m_Name: SodaData
   m_EditorClassIdentifier: 
+  id: 0
+  canBeGrabbed: 1
   itemName: Soda
   itemMesh: {fileID: 0}
   itemMass: 10
