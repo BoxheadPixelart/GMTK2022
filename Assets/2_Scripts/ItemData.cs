@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ItemData : ScriptableObject
 {
+    public ItemId id;
+    public bool canBeGrabbed;
     [SerializeField] public string itemName; 
     [SerializeField] public Mesh itemMesh;
     [SerializeField] public float itemMass;
@@ -15,4 +17,10 @@ public class ItemData : ScriptableObject
     [SerializeField] public float itemRadius; 
     [SerializeField] public float itemHeight;
 
+    public enum ItemId
+    {
+        Nul = -1,
+        Tube = 0,
+        Max
+    }
 } 
