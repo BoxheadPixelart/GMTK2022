@@ -87,9 +87,18 @@ using UnityEngine;
 
         public void MoveToHand()
         {
+            transform.parent = pickupTarget; 
+            
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.Euler(Vector3.zero);
             Vector3 heading = (pickupTarget.position - rb.position);
+            
             rb.velocity += (heading * (25) - rb.velocity) * 0.75f;
+            
             gItemDir = holder.handJoint.rotation.eulerAngles;
+            
+            
+            
             SpringRotateToHand();
         }
 

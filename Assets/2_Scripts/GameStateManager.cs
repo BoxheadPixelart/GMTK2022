@@ -34,7 +34,7 @@ public class GameStateManager : MonoBehaviour
     {
         DebugMode = active; 
         cursorManager.debug = active;
-        MainArm.debug = active; 
+        //MainArm.debug = active; 
         print("Debug Mode: " + active);
     }
 }
