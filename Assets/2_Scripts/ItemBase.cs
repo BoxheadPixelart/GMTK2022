@@ -91,15 +91,6 @@ using UnityEngine;
             
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.Euler(Vector3.zero);
-            Vector3 heading = (pickupTarget.position - rb.position);
-            
-            rb.velocity += (heading * (25) - rb.velocity) * 0.75f;
-            
-            gItemDir = holder.handJoint.rotation.eulerAngles;
-            
-            
-            
-            SpringRotateToHand();
         }
 
         void SpringRotateToHand()
@@ -111,6 +102,7 @@ using UnityEngine;
         public void Pickup(Transform pT, ArmBase hold)
         {
             gameObject.layer = LayerMask.NameToLayer("ItemHeld");
+            rb.isKinematic = true;
             pickupTarget = pT;
             isPickedUp = true;
             holder = hold;
@@ -118,7 +110,9 @@ using UnityEngine;
 
         public void Drop()
         {
+            rb.isKinematic = false; 
             gameObject.layer = LayerMask.NameToLayer("Item");
+            transform.parent = null; 
             isPickedUp = false;
             pickupTarget = null;
             holder = null;
