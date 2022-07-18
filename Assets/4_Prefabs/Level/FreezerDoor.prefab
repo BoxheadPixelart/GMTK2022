@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 2017084416012152896}
   - component: {fileID: 317717490938764587}
   - component: {fileID: 2221959605440644419}
+  - component: {fileID: 6512648825277417374}
   m_Layer: 0
   m_Name: FreezerDoor
   m_TagString: Untagged
@@ -116,6 +117,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6512648825277417374
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7060535296408432044}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.1403265, y: 8.435661, z: 0.7181493}
+  m_Center: {x: 2.5701632, y: -0.00005888939, z: 0.35907394}
 --- !u!1001 &447116727297661337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -217,7 +231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4175748414618102820, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4175748414618102824, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_Mesh
@@ -227,13 +241,21 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4175748414618102827, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 4175748414618102827, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.67
+      objectReference: {fileID: 0}
     - target: {fileID: 4175748414618102829, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4175748414618102829, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_VersionIndex
-      value: 2157
+      value: 2163
       objectReference: {fileID: 0}
     - target: {fileID: 4175748414618102831, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -253,12 +275,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4175748414717049093, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_VersionIndex
-      value: 2154
+      value: 2157
       objectReference: {fileID: 0}
     - target: {fileID: 4175748414717049095, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8f0d8206f3c814347a2e7d107a19bddc, type: 2}
+    - target: {fileID: 4175748414717049116, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6644130112638145432, guid: cab209cb1bdbd564b90d6ae77fc7c53e, type: 3}
       propertyPath: m_Name
       value: PushDoor (4)
