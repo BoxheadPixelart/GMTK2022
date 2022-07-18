@@ -2,6 +2,7 @@ using System.Collections;
 using System; 
 using System.Collections.Generic;
 using KinematicCharacterController.Jam;
+using NaughtyAttributes;
 using Storm.Utils;
 using UnityEngine;
 using UnityEngine.Events; 
@@ -31,7 +32,11 @@ public class MainArm : ArmBase
     // Start is called before the first frame update
     public override void FixedUpdate()
     {
-        SetIdle(); 
+        if (!isPicking)
+        {
+            SetIdle();   
+        }
+ 
             base.FixedUpdate();
     }
 
@@ -41,8 +46,49 @@ public class MainArm : ArmBase
 
     public void PickupItem(ItemBase item)
     {
+        print("PICK UP");
+        StartCoroutine(PickupRoutine(item)); 
+
+    }
+    [ReadOnly]
+    public bool isPicking; 
+    public IEnumerator PickupRoutine(ItemBase item)
+    {
+        isPicking = true; 
+        SetGoalPosition(Camera.main.transform.InverseTransformPoint(item.transform.position));
+        yield return new WaitForSeconds(.25f); 
+        GrabItem(item);  
+        yield return new WaitForSeconds(.1f); 
+        SetGoalPosition(idlePose.localPosition);
+        isPicking = false; 
+        Invoke(nameof(cacheAction),0.1f);
+        yield return null;
+    }
+    public Action cacheAction;
+
+    public void QueueAction(Action a)
+    {
+        cacheAction = a; 
+    }
+
+    public void RunQueueAction()
+    {
+        
+        if (cacheAction is null){ return;}
+        cacheAction.Invoke();
+        cacheAction = null; 
+        
+    }
+
+    public void QueueDrop()
+    {
+        QueueAction(DropHeld);
+    }
+
+    void GrabItem(ItemBase item)
+    {
         heldItem = item.gameObject;
-            item.Pickup(handJoint,this);
+        item.Pickup(handJoint,this);
     }
     
     void DropHeld()
@@ -65,7 +111,7 @@ public class MainArm : ArmBase
     
     public void SetIdle()
     {
-        SetGoalPosition(idlePose.position);
+        SetGoalPosition(idlePose.localPosition);
         SetGoalRotation(idlePose.eulerAngles);
     }
     

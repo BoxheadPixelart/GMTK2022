@@ -5,13 +5,13 @@ using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using Unity.VisualScripting;
+using Unity.VisualScripting.ReorderableList;
 
 namespace KinematicCharacterController.Jam
 {
     public class JamPlayer : MonoBehaviour
     {
         public JamCharacterController Character;
-        public CinemachineVirtualCamera CharacterCamera;
 
         private const string MouseXInput = "Mouse X";
         private const string MouseYInput = "Mouse Y";
@@ -39,7 +39,12 @@ namespace KinematicCharacterController.Jam
         {
             public bool mainHandInteract;
             public bool mainHandInteractHeld;
-            public bool mainHandInteractReleased; 
+            public bool mainHandInteractReleased;
+
+            public bool mainHandThrowReleased; 
+            public bool mainHandThrowHeld;
+            public bool mainHandThrowDown; 
+            
             public bool offHandInteract;
             public bool offHandInteractReleased; 
             public bool offHandInteractHeld;
@@ -67,6 +72,9 @@ namespace KinematicCharacterController.Jam
                     mainHandInteract = Input.GetMouseButtonDown(0);
                     mainHandInteractHeld = Input.GetMouseButton(0);
                     mainHandInteractReleased = Input.GetMouseButtonUp(0);
+                    mainHandThrowReleased = Input.GetMouseButtonUp(1);
+                     mainHandThrowHeld = Input.GetMouseButton(1);
+                     mainHandThrowDown = Input.GetMouseButtonDown(1); 
                 }
 
             }
@@ -115,14 +123,23 @@ namespace KinematicCharacterController.Jam
             Character.SetInputs(ref characterInputs);
         }
 
+        public float chargeTime; 
         void PlayerArmBehaviour(PlayerInputs inputs,CursorManager.PlayerView view) // THIS IS FUCKING GROSS
         {  
             if (inputs.mainHandInteract)
-            {
+            {  
+                if (MainArm.arm.heldItem && !MainArm.arm.isPicking)
+                {
+                    MainArm.arm.DropHeld();
+                    return;
+                }
+                print("Picked Up");
                 if (view.viewItem)
                 {
+                    print("Picked Up See");
                     if (view.viewItem._PublicitemData.canBeGrabbed)
                     {
+                        print("Picked Up Grab");
                         MainArm.arm.PickupItem(view.viewItem);
                     }
                 } 
@@ -130,11 +147,27 @@ namespace KinematicCharacterController.Jam
 
             if (inputs.mainHandInteractReleased)
             {
-                if (MainArm.arm.heldItem)
+                if (MainArm.arm.heldItem && !MainArm.arm.isPicking)
                 {
                     MainArm.arm.DropHeld();
                 }
             }
+            if (inputs.mainHandThrowDown)
+            {
+                chargeTime = Time.unscaledTime; 
+            }
+            
+                if (inputs.mainHandThrowReleased)
+                {
+                    if (MainArm.arm.heldItem && !MainArm.arm.isPicking)
+                    {
+                        float scaler = (Time.unscaledTime - chargeTime); 
+                        print(scaler);
+                        MainArm.arm.ThrowItem( (5 * Mathf.Clamp(scaler * 2, 0, 2)));
+                    }
+                    chargeTime = 0; 
+                }
+                
             
             ///
         }

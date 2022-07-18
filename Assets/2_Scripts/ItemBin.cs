@@ -38,8 +38,11 @@ public class ItemBin : MonoBehaviour
         {
             if (!items.Contains(item))
             {
-                BinChanged.Invoke(this);
+                item.isSuspended = true; 
+                item.rb.useGravity = false; 
                 items.Add(item);
+                BinChanged.Invoke(this);
+                
             }
         }
     }
@@ -53,6 +56,8 @@ public class ItemBin : MonoBehaviour
             return;
         if (items.Contains(item))
         {
+            item.isSuspended = false;
+            item.rb.useGravity = true; 
             items.Remove(item);
             BinChanged.Invoke(this);
         }

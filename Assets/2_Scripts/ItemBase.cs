@@ -19,9 +19,10 @@ using UnityEngine;
         private Vector3 gItemDir;
         private Vector3 itemDirVelo;
         public Vector3 debugRot;
-        public Stats stats; 
+        public Stats stats;
+        public bool isSuspended; 
         // Item Data Stuff that defines indivdual items; 
-        private Rigidbody rb;
+        public Rigidbody rb;
 
         public ItemData LocalItemData
         {
@@ -74,8 +75,18 @@ using UnityEngine;
             }
             else
             {
-                itemDir = rb.rotation.eulerAngles; 
+                itemDir = rb.rotation.eulerAngles;
+                if (isSuspended)
+                {
+                    rb.velocity = rb.velocity / 1.05f; 
+                }
+                else
+                {
+                    rb.useGravity = true; 
+                }
+                
             }
+            
         }
 
         private void OnValidate()

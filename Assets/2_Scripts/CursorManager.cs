@@ -31,7 +31,9 @@ public class CursorManager : MonoBehaviour
     {
         public GameObject viewObj;
         public ItemBase viewItem;
-        public ItemData viewItemData; 
+        public ItemData viewItemData;
+        public ItemBin viewBin;
+        public Vector3 viewWorldPoint; 
     }
 
     
@@ -40,33 +42,12 @@ public class CursorManager : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        EnableReticle();
     }
     
     
     // Update is called once per frame
     void Update()
-    {
-        if (!debug)
-        {
-            UpdateCursorPos();
-            if (Input.GetMouseButton(1))
-            {
-                if (!isActive)
-                {
-                    EnableReticle();
-                }
-            }
-            if (Input.GetMouseButtonUp(1))
-            {
-                DisableReticle();
-            }
-        } 
-        else
-        {
-            EnableReticle();
-        }
-    }
-    void FixedUpdate()
     {
         RaycastHit hit;
             Ray ray = new Ray(cam.transform.position,cam.transform.forward); 
@@ -75,10 +56,13 @@ public class CursorManager : MonoBehaviour
             {
                 GameObject obj = hit.collider.gameObject;
                 ItemBase item = obj.GetComponent<ItemBase>();
-                //reticle.transform.position = new Vector3(hit.point.x, hit.point.y + 0.01f, hit.point.z);
+                ItemBin bin = obj.GetComponent<ItemBin>();
+
+                playerView.viewWorldPoint = hit.point;
+                //
+                playerView.viewBin = bin; 
                 playerView.viewObj = hit.collider.gameObject;
                 playerView.viewItem = item;
-                
             }
     }
 
@@ -99,6 +83,7 @@ public class CursorManager : MonoBehaviour
         isActive = false;
         reticle.SetActive(isActive);
     }
+    
     void ToggleReticle()
     {
         isActive = !isActive;

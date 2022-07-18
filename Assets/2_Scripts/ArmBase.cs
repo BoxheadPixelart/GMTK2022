@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Storm.CharacterController;
 using UnityEngine;
 using Storm.Utils;
@@ -18,14 +19,14 @@ public class ArmBase : MonoBehaviour
 
     public bool isIdle; 
     public float lerpScaler = 0.1f;
-    public MoverBase mover; 
+
+    public CinemachineVirtualCamera playerCam; 
     // Start is called before the first frame update
 
      public virtual void FixedUpdate()
      {
-      
-         
-
+         transform.localPosition = posSpring.Spring(goalPos).output; 
+         transform.rotation = Quaternion.Euler(rotSpring.Spring(goalRot).output);
      }
     public void DropHeld()
     {
@@ -82,10 +83,27 @@ public class ArmBase : MonoBehaviour
             }
         }
     }
+
+    public void ThrowItem(float power)
+    {
+        if (heldItem)
+        {
+            ItemBase item = heldItem.GetComponent<ItemBase>(); // lol what why this
+            if (item != null)
+            {
+                item.Drop();
+                Vector3 launchVector = (Camera.main.transform.forward + (Vector3.up / (power / 4))) * (power * 2); 
+                item.rb.AddForce(launchVector,ForceMode.Impulse);
+                item.ResetAngularVelocity();
+                heldItem = null;
+            }
+        }
+    }
     
     public void SetGoalPosition(Vector3 pos)
     {
-        goalPos = pos;
+
+        goalPos = pos; 
     }
     public void SetGoalRotation(Vector3 euler)
     {
