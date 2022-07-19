@@ -19,7 +19,8 @@ public class ItemBin : MonoBehaviour
     public UnityEvent<ItemBin> BinChanged;
     public BinStatus status;
     public ItemBinData goalData;
-
+    
+    public List<Transform> itemPositions;
     public bool doesBinMeetGoal
     {
         get => goalData.CheckBin(this); 
@@ -36,8 +37,15 @@ public class ItemBin : MonoBehaviour
         ItemBase item = other.GetComponent<ItemBase>();
         if (item)
         {
+            if (items.Count >= itemPositions.Count)
+            {
+                return;
+            }
+            
             if (!items.Contains(item))
             {
+                item.itembBin = this;
+                item.binIndex = items.Count; 
                 item.isSuspended = true; 
                 item.rb.useGravity = false; 
                 items.Add(item);
@@ -56,12 +64,28 @@ public class ItemBin : MonoBehaviour
             return;
         if (items.Contains(item))
         {
+            item.itembBin = null; 
             item.isSuspended = false;
-            item.rb.useGravity = true; 
+            item.rb.useGravity = true;
+            item.binIndex = -1; 
             items.Remove(item);
             BinChanged.Invoke(this);
         }
-    }   
+        ResetAllItemBinIndex(); 
+    }
+
+    public void ResetAllItemBinIndex()
+    {
+        for (int i = 0; i <= items.Count - 1; i++)
+        {
+            items[i].binIndex = i; 
+        }
+    }
+
+  //  public int FirstOpenIndex()
+    //{
+       
+    //}
     
     [Button()]
     public void CalculateBinStatus()

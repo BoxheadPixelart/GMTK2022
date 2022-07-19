@@ -7,6 +7,8 @@ TagManager:
   - GameManager
   - Item
   - ItemHeld
+  - ItemBin
+  - Interact
   layers:
   - Default
   - TransparentFX
@@ -16,9 +18,9 @@ TagManager:
   - UI
   - Item
   - ItemHeld
-  - 
-  - 
-  - 
+  - ItemBin
+  - Player
+  - Interact
   - 
   - 
   - 

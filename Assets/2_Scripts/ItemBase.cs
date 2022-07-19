@@ -1,107 +1,89 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KinematicCharacterController.Jam;
+using NaughtyAttributes;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 [ExecuteInEditMode]
     public class ItemBase : MonoBehaviour // this class is shared by ALL ITEMS and must include features for EVERY ITEM
-    {
-        [SerializeField] public ItemData _PublicitemData;
-        private ItemData _itemData;
+{
+    public static List<ItemBase> allItems = new List<ItemBase>();
+        [SerializeField] public ItemData itemData;
         // private ItemData cachedItemData; 
+        [ReadOnly]
         bool isPickedUp;
+        [ReadOnly]
         public Transform pickupTarget;
+        [ReadOnly]
         public Vector3 velo;
-        public Transform rotTarget;
+
         private ArmBase holder;
-        private Vector3 itemDir;
         private Vector3 gItemDir;
         private Vector3 itemDirVelo;
-        public Vector3 debugRot;
-        public Stats stats;
-        public bool isSuspended; 
+        public ItemBin itembBin; 
+        public bool isSuspended;
+        public int binIndex; 
         // Item Data Stuff that defines indivdual items; 
         public Rigidbody rb;
-
-        public ItemData LocalItemData
-        {
-            get
-            {
-                return _itemData;
-            }
-            set
-            {
-                print("Item Data has been updated");
-                if (_itemData == value)
-                {
-                    print("Item Data Is the same");
-                    return;
-                }
-                
-                _itemData = value;
-                if (OnItemDataChange != null)
-                {
-                    OnItemDataChange(_itemData);
-                }
-            }
-        }
-        public delegate void OnDataChangeDelegate(ItemData newItemData);
-        public event OnDataChangeDelegate OnItemDataChange;
+        
 
         void Start()
         {
+            if (!allItems.Contains(this))
+            {
+                            allItems.Add(this);
+                        }
             rb = GetComponent<Rigidbody>();
             gameObject.layer = LayerMask.NameToLayer("Item");
             //UpdateItemData(itemData);
-            OnItemDataChange += UpdateItemData;
+            
         }
-        public void UpdateItemData(ItemData newItemData)
-        {
-            print("Update Item Method has been called");
-            print(gameObject.name + " is being updated to have " + newItemData.name + "'s Item Data");
-            gameObject.name = newItemData.name;
-            rb.mass = newItemData.itemMass;
-            print("Incoming Data has a different Collider");
-
-        }
+     
         
-        private void FixedUpdate()
+        private void OnDestroy()
         {
-            velo = rb.velocity;
-            if (isPickedUp) //this looks fucking gross and you should feel bad
+            if (allItems.Contains(this))
             {
-                MoveToHand(); 
+                allItems.Remove(this); 
+            }
+        }
+
+   
+
+        public static void PhysicsUpdate(ItemBase item)
+        {
+            if (item.isPickedUp) //this looks fucking gross and you should feel bad
+            {
+                MoveToHand(item); 
             }
             else
             {
-                itemDir = rb.rotation.eulerAngles;
-                if (isSuspended)
+                if (item.itembBin)
                 {
-                    rb.velocity = rb.velocity / 1.05f; 
+                    Vector3 dist = Vector3.ClampMagnitude(item.itembBin.itemPositions[item.binIndex].position - item.rb.position, 2); 
+                    item.rb.velocity += (dist - item.rb.velocity) * .9f;
                 }
                 else
                 {
-                    rb.useGravity = true; 
+                    item.rb.useGravity = true; 
                 }
-                
             }
+        }
+
+        public static void SetBinIndex(int index)
+        {
             
         }
 
-        private void OnValidate()
+        public static void MoveToHand(ItemBase item)
         {
-            LocalItemData = _PublicitemData; 
-            print("Variable has been changed");
-        }
-        
-
-        public void MoveToHand()
-        {
-            transform.parent = pickupTarget; 
+            item.transform.parent = item.pickupTarget; 
             
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.Euler(Vector3.zero);
+            item.transform.localPosition = Vector3.zero;
+            item.transform.localRotation = Quaternion.Euler(Vector3.zero);
         }
 
         void SpringRotateToHand()
@@ -144,10 +126,7 @@ using UnityEngine;
         {
             if (isPickedUp)
             {
-                if (velo.magnitude > stats.maxThrowStrength)
-                {
-                    holder.ForceDropHeld();
-                }
+               //
             }
         print("Item has collided"); 
         CollisionAction(collision); 
@@ -157,23 +136,6 @@ using UnityEngine;
         {
             
         }
-        public void SaveItemDataToScriptableObject()
-        {
-            if (_itemData is null)
-            {
-                print("There is no data on this item. You cannot save the item's data to nothing... what are you doing?");
-            }
-            else
-            {
-                _itemData.name = gameObject.name;
-            //    _itemData.itemMesh = meshFilter.mesh;
-            //    _itemData.itemMaterial = renderer.material;
-               // _itemData.itemColliderSize = collider.size;
-              //  _itemData.itemColliderCenter = collider.center;
-                _itemData.itemMass = rb.mass;
-                print(gameObject.name + "'s Data has been saved to the " + _itemData.name + " Data");
-            }
-        }
 
-}
+    }
 

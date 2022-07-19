@@ -7,6 +7,18 @@ using UnityEngine.PlayerLoop;
 
 public class GameStateManager : MonoBehaviour
 {
+    private static GameStateManager _instance;
+    public static GameStateManager instance
+    {
+        get
+        {
+            if (_instance is null)
+            {
+                _instance = GameObject.FindObjectOfType<GameStateManager>(); 
+            }
+            return _instance; 
+        }   
+    }
     [SerializeField] public bool DebugMode;
     [SerializeField] public JamPlayer Player;
     [SerializeField] public CursorManager cursorManager;
@@ -28,6 +40,14 @@ public class GameStateManager : MonoBehaviour
             {
                 SetDebug(true); 
             }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (ItemBase item in ItemBase.allItems)
+        {
+           ItemBase.PhysicsUpdate(item);
         }
     }
     void SetDebug(bool active)

@@ -19,7 +19,7 @@ namespace KinematicCharacterController.Jam
         private const string HorizontalInput = "Horizontal";
         private const string VerticalInput = "Vertical";
         public PlayerInputs inputs = new PlayerInputs();
-
+        public Stats stats; 
         private static JamPlayer _player;
         public static JamPlayer player
         {
@@ -137,7 +137,7 @@ namespace KinematicCharacterController.Jam
                 if (view.viewItem)
                 {
                     print("Picked Up See");
-                    if (view.viewItem._PublicitemData.canBeGrabbed)
+                    if (view.viewItem.itemData.canBeGrabbed)
                     {
                         print("Picked Up Grab");
                         MainArm.arm.PickupItem(view.viewItem);

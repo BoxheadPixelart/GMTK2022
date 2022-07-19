@@ -29,7 +29,7 @@ public class ItemBinData : ScriptableObject
             int total = 0; 
             foreach (var item in bin.items)
             {
-                if (Goals[i].data == item._PublicitemData)
+                if (Goals[i].data == item.itemData)
                 {
                     total += 1; 
                     
