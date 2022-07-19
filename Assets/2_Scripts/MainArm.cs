@@ -9,6 +9,7 @@ using UnityEngine.Events;
 
 public class MainArm : ArmBase
 {
+    public Transform ikTarget; 
     public Transform idlePose; 
     private static MainArm _arm;
     public static MainArm arm
@@ -32,6 +33,7 @@ public class MainArm : ArmBase
     // Start is called before the first frame update
     public override void FixedUpdate()
     {
+        
         if (!isPicking)
         {
             SetIdle();   
@@ -42,7 +44,11 @@ public class MainArm : ArmBase
 
     // Update is called once per frame
 
-
+    public void Update()
+    {
+        ikTarget.position = transform.position;
+        ikTarget.rotation = transform.rotation; 
+    }
 
     public void PickupItem(ItemBase item)
     {

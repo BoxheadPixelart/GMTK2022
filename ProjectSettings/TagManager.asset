@@ -21,8 +21,8 @@ TagManager:
   - ItemBin
   - Player
   - Interact
-  - 
-  - 
+  - PlayerLimbsView
+  - PlayerTorsoView
   - 
   - 
   - 
