@@ -9,7 +9,8 @@ using UnityEngine.Events;
 
 public class MainArm : ArmBase
 {
-    public Transform ikTarget; 
+    public Transform ikTarget;
+    public Transform ikGoalOffset;
     public Transform idlePose; 
     private static MainArm _arm;
     public static MainArm arm
@@ -38,16 +39,14 @@ public class MainArm : ArmBase
         {
             SetIdle();   
         }
- 
-            base.FixedUpdate();
+        base.FixedUpdate();
     }
 
     // Update is called once per frame
 
     public void Update()
     {
-        ikTarget.position = transform.position;
-        ikTarget.rotation = transform.rotation; 
+        
     }
 
     public void PickupItem(ItemBase item)
